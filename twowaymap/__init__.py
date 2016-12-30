@@ -49,6 +49,11 @@ class TwoWayMap(MutableMapping):
     def __contains__(self, k):
         return k in self.__keymap or k in self.__valmap
 
+    def __getattr__(self, k):
+        if k in self:
+            return self[k]
+        return super(MutableMapping, self).__getattr__(k)
+
     def items(self):
         return self.__keymap.items()
 
