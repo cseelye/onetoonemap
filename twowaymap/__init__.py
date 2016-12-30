@@ -24,6 +24,15 @@ class TwoWayMap(MutableMapping):
         return repr(self.__keymap)
 
     def __setitem__(self, k, v):
+        # Overwriting a key/value with itself is allowed but a no-op
+        if k in self.__keymap and self.__keymap[k] == v:
+            return
+
+        # Values must be unique
+        if v in self.__valmap:
+            raise ValueError("Value must be unique")
+        if v in self.__keymap:
+            raise ValueError("Value cannot be the same as any key")
         self.__keymap[k] = v
         self.__valmap[v] = k
 
@@ -54,6 +63,10 @@ class TwoWayMap(MutableMapping):
             return self[k]
         return super(MutableMapping, self).__getattr__(k)
 
+    def clear(self):
+        self.__keymap.clear()
+        self.__valmap.clear()
+
     def items(self):
         return self.__keymap.items()
 
@@ -65,6 +78,17 @@ class TwoWayMap(MutableMapping):
 
     def update(self, *args, **kwargs):
         dd = dict(*args, **kwargs)
+        keys = dd.keys()
+        values = dd.values()
+
+        # All values must be unique
+        if any([values.count(item) > 1 for item in values]):
+            raise ValueError("All values must be unique")
+
+        # No values can have the same value as any key
+        if any([keys.count(item) > 0 for item in values]):
+            raise ValueError("No value can be the same as any key")
+
         self.__keymap.update(dd)
         self.__valmap = {v: k for k, v in self.__keymap.iteritems()}
 
