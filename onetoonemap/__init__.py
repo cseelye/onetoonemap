@@ -1,15 +1,26 @@
 #!/usr/bin/env python2.7
 """
-A python module that implements a two-way mapping collection type
+A python module that implements a 1:1 mapping collection type
 """
 
 from collections import MutableMapping
 
-class TwoWayMap(MutableMapping):
+class OneToOneMap(MutableMapping):
     """
-    Two-way mapping type. Objects of this type can be treated like a dict,
-    except that both keys and values can be used to look each other up.
-    d[k] -> v and d[v] -> k
+    1:1 mapping type. Objects of this type can be treated like a dict,
+    except that keys and values can both be used to look each other up.
+    This also implies that all keys are unique, all values are unique,
+    and there is no overlap between keys and values:
+
+    m = OneToOneMap()
+
+    m.get(key) == value
+    m.get(value) == key
+
+    m.keys() == set(m.keys())
+    m.values() == set(m.values())
+    set(m.keys()) & set(m.values()) == set()
+    set.(m.keys()).isdisjoint(set(m.values())) == True
     """
 
     def __init__(self, *args, **kwargs):

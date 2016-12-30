@@ -60,55 +60,55 @@ def TestMap(inputData, outputMap):
             assert getattr(outputMap, key) == value
 
 
-class Test_TwoWayMap(object):
+class Test_OneToOneMap(object):
 
     def test_init(self):
         print
-        from twowaymap import TwoWayMap
+        from onetoonemap import OneToOneMap
 
         # Random test data
         dd = CreateTestDictionary()
         print "dd = {}".format(pformat(dd))
 
         # Create an empty map
-        t = TwoWayMap()
+        t = OneToOneMap()
         TestMap({}, t)
 
         # Create a map from a dictionary
-        t = TwoWayMap(dd)
+        t = OneToOneMap(dd)
         print " t = {}".format(t)
         TestMap(dd, t)
 
         # Create a map from a list of tuples
-        t = TwoWayMap(zip(dd.keys(), dd.values()))
+        t = OneToOneMap(zip(dd.keys(), dd.values()))
         print " t = {}".format(t)
         TestMap(dd, t)
 
         # Create a map from a list of keyword args
         # keyword args must be strings
         dd = CreateTestDictionary(keyGenerator=RandomString)
-        t = TwoWayMap(**dd)
+        t = OneToOneMap(**dd)
         print " t = {}".format(t)
         TestMap(dd, t)
 
     def test_repr(self):
         print
-        from twowaymap import TwoWayMap
+        from onetoonemap import OneToOneMap
 
         # Random test data
         dd = CreateTestDictionary()
-        t = TwoWayMap(dd)
+        t = OneToOneMap(dd)
         print str(t)
         print repr(t)
 
     def test_getsetdelclear(self):
         print
-        from twowaymap import TwoWayMap
+        from onetoonemap import OneToOneMap
 
         test_keys = CreateUniqueList(RandomThing, 2)
         test_vals = CreateUniqueList(RandomThing, 2, test_keys)
 
-        t = TwoWayMap()
+        t = OneToOneMap()
 
         t[test_keys[0]] = test_vals[0]
         print " t = {}".format(t)
@@ -132,7 +132,7 @@ class Test_TwoWayMap(object):
         assert t[test_vals[1]] == test_keys[1]
 
         dd = CreateTestDictionary(length=10)
-        t = TwoWayMap(dd)
+        t = OneToOneMap(dd)
         assert len(t) == len(dd)
         t.clear()
         assert len(t) == 0
@@ -140,11 +140,11 @@ class Test_TwoWayMap(object):
 
     def test_duplicatekeyvals(self):
         print
-        from twowaymap import TwoWayMap
+        from onetoonemap import OneToOneMap
 
         data = CreateUniqueList(RandomString, 4)
 
-        t = TwoWayMap()
+        t = OneToOneMap()
 
         # Identical keys are allowed, they just overwrite each other
         t[data[0]] = data[1]
@@ -195,11 +195,11 @@ class Test_TwoWayMap(object):
 
     def test_iteration(self):
         print
-        from twowaymap import TwoWayMap
+        from onetoonemap import OneToOneMap
 
         # Random test data
         dd = CreateTestDictionary()
-        t = TwoWayMap(dd)
+        t = OneToOneMap(dd)
 
         print "dd = {}".format(pformat(dd))
         print "t  = {}".format(t)
