@@ -101,6 +101,34 @@ class Test_OneToOneMap(object):
         print str(t)
         print repr(t)
 
+    def test_attribute(self):
+        print
+        from onetoonemap import OneToOneMap
+
+        data = CreateUniqueList(RandomKeyword, 4)
+
+        t = OneToOneMap()
+        t[data[0]] = data[1]
+
+        # Keys should be accessible by attribute as well
+        assert getattr(t, data[0]) == data[1]
+        eval("t.{}".format(data[0]))
+
+        # Non-existing keys should raise
+        with pytest.raises(AttributeError):
+            getattr(t, RandomKeyword())
+        with pytest.raises(AttributeError):
+            eval("t.{}".format(RandomKeyword()))
+
+    def test_invalidkeys(self):
+        print
+        from onetoonemap import OneToOneMap
+
+        t = OneToOneMap()
+        # Missing keys should raise an exception
+        with pytest.raises(KeyError):
+            t[RandomString()]
+
     def test_getsetdelclear(self):
         print
         from onetoonemap import OneToOneMap
@@ -169,6 +197,13 @@ class Test_OneToOneMap(object):
         assert len(t) == 1
         t.clear()
 
+        dd = {
+            data[0] : data[1],
+            data[2] : data[1]
+        }
+        with pytest.raises(ValueError):
+            t = OneToOneMap(dd)
+
         # New values that are the same as existing keys are not allowed
         t[data[0]] = data[1]
         print "t  = {}".format(t)
@@ -176,6 +211,13 @@ class Test_OneToOneMap(object):
             t[data[2]] = data[0]
         assert len(t) == 1
         t.clear()
+
+        dd = {
+            data[0] : data[1],
+            data[2] : data[0]
+        }
+        with pytest.raises(ValueError):
+            t = OneToOneMap(dd)
 
         # Overwriting existing values with an overlapping value is not allowed
         t[data[0]] = data[1]

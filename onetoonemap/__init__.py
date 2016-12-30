@@ -72,7 +72,7 @@ class OneToOneMap(MutableMapping):
     def __getattr__(self, k):
         if k in self:
             return self[k]
-        return super(MutableMapping, self).__getattr__(k)
+        return MutableMapping.__getattribute__(self, k)
 
     def clear(self):
         self.__keymap.clear()
